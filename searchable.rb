@@ -9,15 +9,14 @@ class Searchable
 
   def prompt_user_input
     puts "\n Provide your file path"
-    @file_path = gets.chomp
+    users_input = gets.chomp
+    @file_path = users_input.empty? ? 'data.json' : users_input
     puts "\n Provide your search query"
     @search_query = gets.chomp
   end
 
   def parse_data_from_file
-    file = File.read(@file_path)
-    @parsed_data = JSON.parse(file)
-    puts @parsed_data
+    @parsed_data = JSON.parse(File.read(@file_path))
   end
 end
 
