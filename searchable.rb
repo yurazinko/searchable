@@ -1,4 +1,5 @@
 require 'json'
+require 'pry'
 
 class Searchable
   def run_app
@@ -7,9 +8,8 @@ class Searchable
   end
 
   def prompt_user_input
-    puts "\n Provide file name with data"
-    @file_path = "/#{gets.chomp}"
-
+    puts "\n Provide your file path"
+    @file_path = gets.chomp
     puts "\n Provide your search query"
     @search_query = gets.chomp
   end
