@@ -21,7 +21,12 @@ class Searchable
   end
 
   def collect_search_results
-    puts @parsed_data.select { |record| record.values.grep(/#{@search_query}/).any? }
+    @results = @parsed_data.select do |record|
+      # Select matching records by params split in words: 'Scripting Microsoft' => ['Scripting', 'Microsoft']
+      record if @search_query.split.select { |param| record.values.grep(/#{param}/).any? }.compact.any?
+    end
+
+    puts @results
   end
 end
 
