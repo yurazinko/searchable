@@ -5,6 +5,7 @@ class Searchable
   def run_app
     prompt_user_input
     parse_data_from_file
+    collect_search_results
   end
 
   def prompt_user_input
@@ -17,6 +18,10 @@ class Searchable
 
   def parse_data_from_file
     @parsed_data = JSON.parse(File.read(@file_path))
+  end
+
+  def collect_search_results
+    puts @parsed_data.select { |record| record.values.grep(/#{@search_query}/).any? }
   end
 end
 
