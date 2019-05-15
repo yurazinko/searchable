@@ -21,12 +21,25 @@ class Searchable
   end
 
   def collect_search_results
-    @results = @parsed_data.select do |record|
-      # Select matching records by params split in words: 'Scripting Microsoft' => ['Scripting', 'Microsoft']
-      record if @search_query.split.select { |param| record.values.grep(/#{param}/).any? }.compact.any?
-    end
+    regexp = Regexp.union([' ', '"', "'"]) # Regexp for splitting search query by space or quotes
+    @query_elements = @search_query.split(regexp).map(&:strip)
 
-    puts @results
+    return if @query_elements.empty?
+
+    @results = @query_elements.one? ? results_by_single_word : results_by_multiple_words
+
+    puts @results.any? ? @results : 'Nothing found'
+  end
+
+  def results_by_single_word
+    @parsed_data.select { |record| record.values.grep(/#{@query_elements[0]}/).any? }
+  end
+
+  def results_by_multiple_words
+    @parsed_data.reject do |record|
+      # Reject all records which values does not contain matches with all of @query_elements
+      @query_elements.map { |q| record.values.any? { |v| v.match?(/#{q}/)} }.include?(false)
+    end
   end
 end
 
