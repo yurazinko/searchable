@@ -32,13 +32,13 @@ class Searchable
   end
 
   def results_by_single_word
-    @parsed_data.select { |record| record.values.grep(/#{@query_elements[0]}/).any? }
+    @parsed_data.select { |record| record.values.flat_map(&:split).include?(@query_elements[0]) }
   end
 
   def results_by_multiple_words
     @parsed_data.reject do |record|
       # Reject all records which values does not contain matches with all of @query_elements
-      @query_elements.map { |q| record.values.any? { |v| v.match?(/#{q}/)} }.include?(false)
+      @query_elements.map { |q| record.values.flat_map(&:split).any? { |v| v == q } }.include?(false)
     end
   end
 end
