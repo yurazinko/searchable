@@ -22,7 +22,7 @@ class Searchable
 
   def collect_search_results
     regexp = Regexp.union([' ', '"', "'"]) # Regexp for splitting search query by space or quotes
-    @query_elements = @search_query.split(regexp).map(&:strip)
+    @query_elements = @search_query.split(regexp).map(&:strip).reject(&:empty?)
 
     return if @query_elements.empty?
 
