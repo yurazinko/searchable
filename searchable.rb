@@ -24,7 +24,7 @@ class Searchable
     regexp = Regexp.union([' ', '"', "'"]) # Regexp for splitting search query by space or quotes
     @query_elements = @search_query.split(regexp).map(&:strip).reject(&:empty?)
 
-    return if @query_elements.empty?
+    return puts 'Empty search query' if @query_elements.empty?
 
     @results = @query_elements.one? ? results_by_single_word : results_by_multiple_words
 
